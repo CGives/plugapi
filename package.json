@@ -24,6 +24,7 @@
         "node-uuid": "*",
         "node-html-encoder": "*",
         "request": "*",
+        "uuid": "*",
         "ws": "*"
 	},
 	"repository": {
