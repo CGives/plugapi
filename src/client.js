@@ -9,7 +9,7 @@
 
   ws = null;
   
-  var uuid = require('uuid');
+  var uuid = require('node-uuid');
   
   var net = require('net');
   

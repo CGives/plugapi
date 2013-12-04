@@ -9,19 +9,26 @@
 		{
 			"name": "Nicolas Jeker",
 			"email": "n.jeker@gmx.net"
-		}
+		},
+        {
+            "name": "Kate Wellington",
+            "email": "sharedferret@gmail.com"
+        }
 	],
 	"description": "Generic API for building Plug.dj bots",
 	"main": "./src/index.js",
 	"lib": "./src/index.js",
 	"dependencies": {
-		"coffee-script": "*",
-		"node-uuid": "*",
-		"node-html-encoder": "*"
+        "cheerio": "*",
+        "coffee-script": "*",
+        "node-uuid": "*",
+        "node-html-encoder": "*",
+        "request": "*",
+        "ws": "*"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/chrisinajar/plugapi"
+		"url": "https://github.com/sharedferret/plugapi"
 	},
 	"license": "freeBSD",
 	"engines": {
