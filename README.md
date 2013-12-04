@@ -5,24 +5,34 @@ A generic API for creating Plug.dj bots
 
 
 ## How to use
-Just grab it from npm, or optionally use the lastest version for github
-
-```
-npm install plugapi
-```
+Due to a Plug update, the original version of PlugAPI from npm no longer works. You will have to use this fork for now.
 
 To connect, do this!
 
 ```
-var AUTH = 'xxxxxxxxxxxxxxxxxxxxxxxxxxx=?_expires=xxxxxxxxxxxxxxxxxx==&user_id=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx='; // Put your auth token here, it's the cookie value for usr
-var ROOM = 'coding-soundtrack';
+var PlugAPI = require('./plugapi'); // git clone (or unzip) into the same directory as your .js file. There should be plugapi/package.json, for example (and other files)
+var ROOM = 'chillout-mixer-ambient-triphop';
+var UPDATECODE = 'fe940c'; // We're not quite sure what this is yet, but the API doesn't work without it. It's possible that a future Plug update will change this, so check back here to see if this has changed, and set appropriately, if it has. You can omit using it if you wish - the value as of writing needs to be 'fe940c', and is hardcoded into the bot in the event it is not specified below.
 
-var bot = new PlugAPI(AUTH);
-bot.connect();
+// Instead of providing the AUTH, you can use this static method to get the AUTH cookie via twitter login credentials:
+PlugAPI.getAuth({
+	username: 'xxx',
+	password: 'xxx'
+}, function(err, auth) { // if err is defined, an error occurred, most likely incorrect login
+	if(err) {
+		console.log("An error occurred: " + err);
+		return;
+	}
+	var bot = new PlugAPI(auth, UPDATECODE);
+	bot.connect(ROOM);
 
-bot.on('connected', function() {
-	bot.joinRoom('coding-soundtrack');
-})
+	bot.on('roomJoin', function(data) {
+		// data object has information on the room - list of users, song currently playing, etc.
+		console.log("Joined " + ROOM + ": ", data);
+	});
+});
+
+
 ```
 
 You can also pass the room directly to connect to save SO MUCH TIME
@@ -72,13 +82,31 @@ type: 'chat'
 ```
 Example:
 ```
-{ data: 
-   { fromID: 'xxxxxxxxxxxxxxxxxxxxxxxx',
-     message: 'hello world',
-     from: 'mnme',
-     type: 'message',
-     chatID: 'xxxxxxxxxx' },
-  type: 'chat' }
+{
+	fromID: 'xxxxxxxxxxxxxxxxxxxxxxxx',
+    message: 'hello world',
+    from: 'mnme',
+    type: 'chat',
+    chatID: 'xxxxxxxxxx'
+}
+```
+####	emote
+```
+data:
+	fromID: 'user id'
+	message: 'message text'
+	from: 'username'
+	type: 'emote'
+	chatID: 'chat id'
+```
+Example:
+```
+{	fromID: 'xxxxxxxxxxxxxxxxxxxxxxxx',
+    message: 'hello world',
+    from: 'mnme',
+    type: 'chat',
+    chatID: 'xxxxxxxxxx' 
+}
 ```
 ####	userLeave
 ```
@@ -547,4 +575,13 @@ The logger object must have a function called "log" that takes any number of par
 ```
 var prompt = new Prompt();
 bot.setLogObject(prompt);
+```
+
+#### Multi line chat
+Since Plug.dj cuts off chat messages at 250 characters, you can choose to have your bot split up chat messages into multiple lines:
+
+```
+var bot = new PlugAPI(auth, UPDATECODE);
+bot.multiLine = true; // Set to true to enable multiline chat. Default is false
+bot.multiLineLimit = 5; // Set to the maximum number of lines the bot should split messages up into. Any text beyond this number will just be omitted. Default is 5.
 ```
