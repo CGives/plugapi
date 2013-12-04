@@ -287,6 +287,7 @@
           this.room.setDjs(msg.data.djs);
           break;
         case 'djAdvance':
+          this.emit('end_song', { media: this.room.getMedia(), roomScore: this.room.getRoomScore() });
           this.room.setDjs(msg.data.djs);
           this.room.setMedia(msg.data.media);
           this.historyID = msg.data.historyID;

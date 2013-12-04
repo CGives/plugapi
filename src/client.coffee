@@ -113,6 +113,7 @@ class PlugAPI extends EventEmitter
 			when 'djUpdate'
 				@room.setDjs msg.data
 			when 'djAdvance'
+				@emit 'end_song', {media: @room.getMedia(), roomScore: @room.getRoomScore()}
 				@room.setDjs msg.data.djs
 				@room.setMedia(msg.data.media)
 				@historyID = msg.data.historyID
