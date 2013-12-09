@@ -9,7 +9,7 @@
 
   ws = null;
   
-  var uuid = require('uuid');
+  var uuid = require('node-uuid');
   
   var net = require('net');
   
@@ -87,7 +87,7 @@
 	  
 	  this.multiLineLimit = 5;
 	  
-	  this.updateCode = updateCode != undefined && updateCode.match(/[0-9a-f]{6}/) ? updateCode : 'fe940c';
+	  this.updateCode = updateCode;
 	  
       if (!key) {
         throw new Error("You must pass the authentication cookie into the PlugAPI object to connect correctly");
@@ -258,6 +258,7 @@
 
     PlugAPI.prototype.messageHandler = function(msg) {
       switch (msg.type) {
+        
         case 'ping':
           this.sendRPC('user.pong');
           break;
@@ -275,6 +276,7 @@
           msg.data.message = encoder.htmlDecode(msg.data.message);
           this.emit('speak', msg.data);
           break;
+        case 'roomScoreUpdate':
         case 'voteUpdate':
           if (msg.data.vote === 1) {
             this.room.logVote(msg.data.id, 'woot');
@@ -287,7 +289,7 @@
           this.room.setDjs(msg.data.djs);
           break;
         case 'djAdvance':
-          this.emit('end_song', { media: this.room.getMedia(), roomScore: this.room.getRoomScore() });
+          msg.previous_song = { media: this.room.getMedia(), roomScore: this.room.getRoomScore() };
           this.room.setDjs(msg.data.djs);
           this.room.setMedia(msg.data.media);
           this.historyID = msg.data.historyID;

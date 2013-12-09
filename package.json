@@ -19,11 +19,11 @@
 	"main": "./src/index.js",
 	"lib": "./src/index.js",
 	"dependencies": {
-        "cheerio": "*",
+		"cheerio": "*",
         "coffee-script": "*",
         "node-uuid": "*",
         "node-html-encoder": "*",
-        "request": "*",
+        "request": "<=2.27.0",
         "uuid": "*",
         "ws": "*"
 	},
